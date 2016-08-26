@@ -2,6 +2,7 @@
 
 namespace KGzocha\Searcher\Chain;
 
+use KGzocha\Searcher\Chain\Collection\CellCollectionInterface;
 use KGzocha\Searcher\Criteria\Collection\CriteriaCollectionInterface;
 use KGzocha\Searcher\Result\ResultCollection;
 use KGzocha\Searcher\SearcherInterface;
@@ -19,16 +20,15 @@ class ChainSearch implements SearcherInterface
     const MINIMUM_CELLS = 2;
 
     /**
-     * @var CellInterface[]
+     * @var CellCollectionInterface
      */
     private $cells;
 
     /**
-     * @param CellInterface[] $cells
+     * @param CellCollectionInterface $cells
      */
-    public function __construct(array $cells)
+    public function __construct(CellCollectionInterface $cells)
     {
-        $this->validateCells($cells);
         $this->cells = $cells;
     }
 
@@ -49,7 +49,7 @@ class ChainSearch implements SearcherInterface
         $previousResults = null;
         $resultsArray = [];
 
-        foreach ($this->cells as $cell) {
+        foreach ($this->cells->getCells() as $cell) {
             if ($cell->getTransformer()->skip($previousResults)) {
                 continue;
             }
